@@ -7,7 +7,7 @@ export default [
   eslint.configs.recommended,
   prettier,
   {
-    files: ['**/*.js', '**/*.jsx'],
+    files: ['**/*.{js, ts}', '**/*.jsx'],
     ignores: ['dist', 'build', 'node_modules'],
     languageOptions: {
       parserOptions: {
