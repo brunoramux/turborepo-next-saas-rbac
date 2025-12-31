@@ -15,5 +15,9 @@
       "@saas/eslint-config/javascript"
     ]
   },
-  "prettier": "@saas/prettier"
+  "prettier": "@saas/prettier",
+  "dependencies": {
+    "@casl/ability": "^6.7.5",
+    "zod": "^4.3.2"
+  }
 }
