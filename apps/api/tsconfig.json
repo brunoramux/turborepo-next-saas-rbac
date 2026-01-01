@@ -1,4 +1,4 @@
 {
     "extends": "@saas/ts-config/node.json",
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "prisma/**/*"],
 }
