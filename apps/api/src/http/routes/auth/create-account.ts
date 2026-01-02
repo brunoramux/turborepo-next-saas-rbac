@@ -55,6 +55,24 @@ export async function createAccount(app: FastifyInstance) {
           },
         })
 
+        const domain = email.split('@')[1]
+
+        const organization = await prisma.organization.findUnique({
+          where: {
+            domain,
+          },
+        })
+
+        if (organization && organization.shouldAttachUsersByDomain === true) {
+          await prisma.member.create({
+            data: {
+              userId: newUser.id,
+              organizationId: organization.id,
+              role: 'MEMBER',
+            },
+          })
+        }
+
         if (newUser) {
           reply.status(201).send({
             newUser: {
@@ -64,7 +82,7 @@ export async function createAccount(app: FastifyInstance) {
             },
           })
         }
-      } catch (e) {
+      } catch {
         return reply.status(400).send({
           message: 'Error creating user. Please try again.',
         })
