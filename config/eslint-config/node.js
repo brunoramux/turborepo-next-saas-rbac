@@ -22,9 +22,6 @@ export default tseslint.config(
         projectService: true,
       },
     },
-    rules: {
-      // Example: allow dev dependencies in tests
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
-    },
+    rules: {},
   }
 )
