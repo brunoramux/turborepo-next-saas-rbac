@@ -3,51 +3,55 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 import { prisma } from '../../../lib/prisma'
 import { UnauthorizedError } from '../_errors/unauthorized-error'
+import { auth } from '../../middlewares/auth'
 
 export async function getUserProfile(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().get(
-    '/profile',
-    {
-      schema: {
-        tags: ['Auth'],
-        summary: 'Get user profile.',
-        response: {
-          200: z.object({
-            id: z.string(),
-            name: z.string().nullable(),
-            email: z.email(),
-            createdAt: z.date(),
-            updatedAt: z.date(),
-            avatarUrl: z.url().nullable(),
-          }),
-          401: z.object({
-            message: z.string(),
-          }),
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(auth)
+    .get(
+      '/profile',
+      {
+        schema: {
+          tags: ['Auth'],
+          summary: 'Get user profile.',
+          response: {
+            200: z.object({
+              id: z.string(),
+              name: z.string().nullable(),
+              email: z.email(),
+              createdAt: z.date(),
+              updatedAt: z.date(),
+              avatarUrl: z.url().nullable(),
+            }),
+            401: z.object({
+              message: z.string(),
+            }),
+          },
         },
       },
-    },
-    async (request, reply) => {
-      try {
-        const token = await request.jwtVerify<{ sub: string }>()
-        const user = await prisma.user.findUnique({
-          where: { id: token.sub },
-        })
+      async (request, reply) => {
+        try {
+          const userId = await request.getCurrentUserId()
+          const user = await prisma.user.findUnique({
+            where: { id: userId },
+          })
 
-        if (!user) {
+          if (!user) {
+            throw new UnauthorizedError('Unauthorized')
+          }
+
+          return reply.status(200).send({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            avatarUrl: user.avatarUrl,
+          })
+        } catch {
           throw new UnauthorizedError('Unauthorized')
         }
-
-        return reply.status(200).send({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-          avatarUrl: user.avatarUrl,
-        })
-      } catch {
-        throw new UnauthorizedError('Unauthorized')
       }
-    }
-  )
+    )
 }
