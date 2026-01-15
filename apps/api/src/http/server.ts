@@ -40,6 +40,10 @@ app.register(fastifySwaggerUI, {
   routePrefix: '/docs',
 })
 
+app.get('/healthcheck', async () => {
+  return { status: 'ok' }
+})
+
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET!,
 })
