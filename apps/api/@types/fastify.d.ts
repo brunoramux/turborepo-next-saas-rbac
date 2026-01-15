@@ -1,5 +1,7 @@
 import 'fastify'
 
+import { Member, Organization } from '@prisma/client'
+
 declare module 'fastify' {
   export interface FastifyRequest {
     /**
@@ -8,5 +10,9 @@ declare module 'fastify' {
      * @throws UnauthorizedError if the token is invalid or missing.
      */
     getCurrentUserId(): Promise<string>
+    getUserMembership(slug: string): Promise<{
+      organization: Organization
+      membership: Member
+    }>
   }
 }
