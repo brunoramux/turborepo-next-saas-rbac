@@ -15,6 +15,7 @@ import { getUserProfile } from './routes/auth/get-profile'
 import { erroHandler } from './error-handler'
 import { requestPasswordRecovery } from './routes/auth/request-password-recovery'
 import { createOrganization } from './routes/orgs/create-organization'
+import { getMembership } from './routes/orgs/get-membership'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -54,6 +55,7 @@ app.register(authenticateWithPassword)
 app.register(getUserProfile)
 app.register(requestPasswordRecovery)
 app.register(createOrganization)
+app.register(getMembership)
 
 app.listen({ port: 3333 }).then(() => {
   console.log('HTTP server running on http://localhost:3333')
