@@ -1,0 +1,25 @@
+{
+  "name": "@saas/env",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@t3-oss/env-nextjs": "^0.13.10",
+    "zod": "^4.3.2"
+  },
+  "devDependencies": {
+    "@saas/eslint-config": "workspace:*",
+    "@saas/prettier": "workspace:*",
+    "@saas/ts-config": "workspace:*",
+    "@types/node": "^25.0.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@saas/eslint-config/javascript"
+    ]
+  },
+  "prettier": "@saas/prettier"
+}
