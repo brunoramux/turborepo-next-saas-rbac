@@ -53,7 +53,7 @@ model Invite {
   createdAt      DateTime     @default(now()) @map("created_at")
   userId         String?      @map("user_id")
   organizationId String       @map("organization_id")
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   author         User?        @relation(fields: [userId], references: [id])
 
   @@unique([email, organizationId])
@@ -66,7 +66,7 @@ model Member {
   role           Role         @default(MEMBER)
   organizationId String       @map("organization_id")
   userId         String       @map("user_id")
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id])
 
   @@unique([organizationId, userId])
@@ -101,7 +101,7 @@ model Project {
   updatedAt      DateTime     @updatedAt @map("updated_at")
   userId         String       @map("user_id")
   organizationId String       @map("organization_id")
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   owner          User         @relation(fields: [userId], references: [id])
 
   @@map("projects")

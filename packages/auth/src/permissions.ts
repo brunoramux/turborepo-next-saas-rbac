@@ -17,10 +17,11 @@ export const permissions: Record<Role, PermissionsByRole> = {
     cannot('update', 'Organization')
     can('update', 'Organization', { ownerId: { $eq: user.id } })
   },
-  MEMBER: (user, { can }) => {
+  MEMBER: (user, { can, cannot }) => {
     can('get', 'User')
     can(['create', 'get'], 'Project')
     can(['update', 'delete'], 'Project', { ownerId: { $eq: user.id } })
+    cannot('delete', 'Organization')
   },
   BILLING: (_, { can }) => {
     can('manage', 'Billing')
