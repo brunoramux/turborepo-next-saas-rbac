@@ -28,6 +28,8 @@ export const createAppAbility = createMongoAbility as CreateAbility<AppAbility>
 
 export * from './models/user.ts'
 export * from './models/project.ts'
+export * from './models/project.ts'
+export * from './models/organization.ts'
 
 // FUNCAO A SER UTILIZADA PRA TESTAR EXTERNAMENTE AS PERMISSOES DO USUARIO
 export function defineAbilityFor(user: User) {
@@ -48,6 +50,6 @@ export function defineAbilityFor(user: User) {
       return subject.__typename
     },
   })
-
+  console.log(ability)
   return ability
 }
