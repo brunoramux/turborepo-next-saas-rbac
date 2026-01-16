@@ -4,11 +4,10 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
 
-import { auth } from '@/http/middlewares/auth'
-import { prisma } from '@/lib/prisma'
-
 import { BadRequestError } from '../_errors/bad-request-error'
 import { UnauthorizedError } from '../_errors/unauthorized-error'
+import { auth } from '../../middlewares/auth'
+import { prisma } from '../../../lib/prisma'
 
 export async function revokeInvite(app: FastifyInstance) {
   app
@@ -41,11 +40,11 @@ export async function revokeInvite(app: FastifyInstance) {
           role: membership.role,
         })
 
-        const { cannot } = defineAbilityFor(authUser)
+        const ability = defineAbilityFor(authUser)
 
-        if (cannot('delete', 'Invite')) {
+        if (ability.cannot('delete', 'Invite')) {
           throw new UnauthorizedError(
-            'You are not allowed to delete an invites.',
+            'You are not allowed to delete an invites.'
           )
         }
 
@@ -67,6 +66,6 @@ export async function revokeInvite(app: FastifyInstance) {
         })
 
         return reply.status(204).send()
-      },
+      }
     )
 }

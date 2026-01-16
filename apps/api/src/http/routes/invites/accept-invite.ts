@@ -2,10 +2,9 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
 
-import { auth } from '@/http/middlewares/auth'
-import { prisma } from '@/lib/prisma'
-
 import { BadRequestError } from '../_errors/bad-request-error'
+import { auth } from '../../middlewares/auth'
+import { prisma } from '../../../lib/prisma'
 
 export async function acceptInvite(app: FastifyInstance) {
   app
@@ -70,6 +69,6 @@ export async function acceptInvite(app: FastifyInstance) {
         ])
 
         return reply.status(204).send()
-      },
+      }
     )
 }

@@ -5,11 +5,10 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
 
-import { auth } from '@/http/middlewares/auth'
-import { prisma } from '@/lib/prisma'
-
 import { BadRequestError } from '../_errors/bad-request-error'
 import { UnauthorizedError } from '../_errors/unauthorized-error'
+import { auth } from '../../middlewares/auth'
+import { prisma } from '../../../lib/prisma'
 
 export async function createInvite(app: FastifyInstance) {
   app
@@ -48,11 +47,11 @@ export async function createInvite(app: FastifyInstance) {
           role: membership.role,
         })
 
-        const { cannot } = defineAbilityFor(authUser)
+        const ability = defineAbilityFor(authUser)
 
-        if (cannot('create', 'Invite')) {
+        if (ability.cannot('create', 'Invite')) {
           throw new UnauthorizedError(
-            'You are not allowed to create new invites.',
+            'You are not allowed to create new invites.'
           )
         }
 
@@ -63,7 +62,7 @@ export async function createInvite(app: FastifyInstance) {
           organization.domain === domain
         ) {
           throw new BadRequestError(
-            `Users with "${domain}" domain will join your oganization automatically on login`,
+            `Users with "${domain}" domain will join your oganization automatically on login`
           )
         }
 
@@ -78,7 +77,7 @@ export async function createInvite(app: FastifyInstance) {
 
         if (inviteWithSameEmail) {
           throw new BadRequestError(
-            'Another invite with same e-amil already exists.',
+            'Another invite with same e-amil already exists.'
           )
         }
 
@@ -93,7 +92,7 @@ export async function createInvite(app: FastifyInstance) {
 
         if (memberWithSameEmail) {
           throw new BadRequestError(
-            'Another member with this e-amil already exists.',
+            'Another member with this e-amil already exists.'
           )
         }
 
@@ -101,7 +100,7 @@ export async function createInvite(app: FastifyInstance) {
           data: {
             email,
             role,
-            author_id: userId,
+            userId,
             organizationId: organization.id,
           },
         })
@@ -109,6 +108,6 @@ export async function createInvite(app: FastifyInstance) {
         return reply.status(201).send({
           inviteId: invite.id,
         })
-      },
+      }
     )
 }
