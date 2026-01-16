@@ -47,9 +47,9 @@ export async function shutdownOrganization(app: FastifyInstance) {
           ownerId: organization.userId,
         })
 
-        const { cannot } = defineAbilityFor(authUser)
+        const ability = defineAbilityFor(authUser)
 
-        if (cannot('delete', authOrganization)) {
+        if (ability.cannot('delete', authOrganization)) {
           throw new UnauthorizedError(
             'You are not allowed to delete this organization.'
           )
